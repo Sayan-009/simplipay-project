@@ -1,0 +1,17 @@
+{
+  "name": "simplipay-backend",
+  "version": "1.0.0",
+  "description": "SimpliPay is a prototype payment system website developed as a college software engineering project. This application simulates a UPI-like payment experience where users can register, create *fake* UPI IDs, deposit money, send money to other users, and view transaction history. This is a **simulation only** and does not involve real transactions.",
+  "main": "index.js",
+  "type": "module",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "sayan",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1"
+  }
+}
