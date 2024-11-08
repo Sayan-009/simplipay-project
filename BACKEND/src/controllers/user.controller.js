@@ -35,7 +35,7 @@ const userRegister = asyncHandler(async (req, res, next) => {
     throw new apiError(400, "avatar upload failed");
   }
 
-  const upiId = crypto.randomBytes(16).toString("hex");
+  const upiId = crypto.randomBytes(10).toString("hex") + "@spay";
 
   const user = await User.create({
     fullName,

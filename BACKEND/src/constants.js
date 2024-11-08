@@ -1,1 +1,3 @@
-export const db_name = "simpliPay"
+const db_name = "simpliPay"
+
+export default db_name;
