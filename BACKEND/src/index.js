@@ -10,7 +10,6 @@ const PORT = process.env.PORT || 8000;
 
 connectMongoDB()
   .then(() => {
-    console.log("MongoDB connected!");
     app.listen(PORT, () => {
       console.log(`server is listen on port ${PORT}`);
     });
