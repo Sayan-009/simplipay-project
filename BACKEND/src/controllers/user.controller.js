@@ -7,9 +7,9 @@ import fs from "fs";
 
 const generateRefreshAndAccessToken = async (userId) => {
   try {
-    const accessToken = generateAccessToken();
-    const refreshToken = generateRefreshToken();
     const user = await User.findById(userId);
+    const accessToken = user.generateAccessToken();
+    const refreshToken = user.generateRefreshToken();
     user.refreshToken = refreshToken;
     await user.save({ validateBeforeSave: false });
 
@@ -88,6 +88,8 @@ const userRegister = asyncHandler(async (req, res) => {
 const userLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
+  console.log(req.body);
+
   if (
     [email, password].some((field) => {
       return field?.trim() === "" || field?.trim() === undefined;
@@ -138,22 +140,21 @@ const userLogin = asyncHandler(async (req, res) => {
 });
 
 const userLogout = asyncHandler(async (req, res) => {
-  await User.findByIdAndUpdate(
-    req.user._id,
-    {
-      $set: {
-        refreshToken: undefined,
-      },
-    },
-    {
-      new: true,
-    }
+  const user = await User.findById(req.user._id).select(
+    "-password -refreshToken"
   );
+
+  user.refreshToken = undefined;
+  await user.save({ validateBeforeSave: false });
 
   const options = {
     httpOnly: true,
     secure: true,
   };
+
+  if (!user) {
+    return res.status(404).send("User  not found or already logged out");
+  }
 
   return res
     .status(200)
