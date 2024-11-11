@@ -53,6 +53,7 @@ const userRegister = asyncHandler(async (req, res) => {
   });
 
   if (existedUser) {
+    fs.unlinkSync(avatarLocalPath);
     throw new apiError(408, "user allready exist");
   }
 
@@ -87,8 +88,6 @@ const userRegister = asyncHandler(async (req, res) => {
 
 const userLogin = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
-  console.log(req.body);
 
   if (
     [email, password].some((field) => {
