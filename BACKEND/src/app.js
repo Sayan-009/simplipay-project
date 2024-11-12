@@ -18,7 +18,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 import router from "./routes/user.route.js";
+import transactionRouter from "./routes/transaction.route.js";
 
 app.use("/api/v1/users", router);
+app.use("/api/v1/transaction", transactionRouter);
 
 export default app;

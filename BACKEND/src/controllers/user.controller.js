@@ -167,7 +167,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   const incomingRefreshToken =
     req.cookies.refreshToken || req.body.refreshToken;
   if (!incomingRefreshToken) {
-    throw new apiError(401, "Unathorized request");
+    throw new apiError(401, "Unauthorized request");
   }
 
   const decodeToken = await jwt.verify(
@@ -188,8 +188,9 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     throw new apiError(403, "refreshToken is Invalid");
   }
 
-  const { newAccessToken, newRefreshToken } =
-    await generateRefreshAndAccessToken(user._id);
+  const { accessToken, refreshToken } = await generateRefreshAndAccessToken(
+    user?._id
+  );
 
   const options = {
     httpOnly: true,
@@ -198,12 +199,12 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 
   return res
     .status(200)
-    .cookie("accessToken", newAccessToken, options)
-    .cookie("refreshToken", newRefreshToken, options)
+    .cookie("accessToken", accessToken, options)
+    .cookie("refreshToken", refreshToken, options)
     .json(
       new apiResponse(
         200,
-        { accessToken: newAccessToken, refreshToken: newRefreshToken },
+        { accessToken, refreshToken },
         "access token is refreshed"
       )
     );
