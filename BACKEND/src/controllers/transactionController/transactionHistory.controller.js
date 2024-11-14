@@ -6,7 +6,9 @@ import { Transaction } from "../../models/Transaction.model.js";
 
 const transactionHistory = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
-  const transactionHistoryDetails = await Transaction.find({senderUPI: user.upiId}).sort({ transactionDate: -1 });
+  const transactionHistoryDetails = await Transaction.find({
+    $or: [{senderUPI: user.upiId}, {receiverUPI: user.upiId}]
+  }).sort({ transactionDate: -1 });
 
   if (!transactionHistoryDetails) {
     throw new apiError(500, "Error fetching transaction history");
