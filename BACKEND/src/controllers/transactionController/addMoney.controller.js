@@ -40,7 +40,7 @@ const addMoney = asyncHandler(async (req, res) => {
   }
 
   const notification = await Notification.create({
-    userID: user.id,
+    userID: user._id,
     message,
   });
 

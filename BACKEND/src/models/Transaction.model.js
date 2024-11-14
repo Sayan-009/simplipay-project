@@ -23,7 +23,6 @@ const transactionShema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ["success, failed"],
         default: "success"
     }
 }, {
