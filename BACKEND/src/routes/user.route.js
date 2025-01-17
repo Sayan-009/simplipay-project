@@ -8,6 +8,9 @@ import {
 import userNotification from "../controllers/notification.controller.js";
 import verifyJWT from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
+import multer from "multer";
+
+const image = multer()
 
 const router = Router();
 
@@ -15,7 +18,7 @@ router
   .route("/register")
   .post(upload.fields([{ name: "avatar", maxCount: 1 }]), userRegister);
 
-router.route("/login").post(userLogin);
+router.route("/login").post(image.none(), userLogin);
 
 router.route("/logout").post(verifyJWT, userLogout);
 
