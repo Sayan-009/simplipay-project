@@ -9,6 +9,7 @@ import userNotification from "../controllers/notification.controller.js";
 import verifyJWT from "../middlewares/auth.middleware.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import multer from "multer";
+import authController from "../controllers/auth.controller.js";
 
 const image = multer()
 
@@ -20,7 +21,9 @@ router
 
 router.route("/login").post(image.none(), userLogin);
 
-router.route("/logout").post(verifyJWT, userLogout);
+router.route("/logout").get(verifyJWT, userLogout);
+
+router.route("/home").get(verifyJWT, authController);
 
 router.route("/get-access-token").get(refreshAccessToken);
 
