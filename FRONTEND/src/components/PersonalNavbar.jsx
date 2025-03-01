@@ -3,11 +3,17 @@ import { Link } from 'react-router-dom'
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from './ToastContext';
+import { useRecoilValue } from 'recoil';
+import { userState } from '../stateManagement/userState';
 
-function PersonalNavbar({ userImage }) {
-
+function PersonalNavbar({ isHome }) {
+    const user = useRecoilValue(userState);
     const navigate = useNavigate();
-    const {showToast} = useToast();
+    const { showToast } = useToast();
+
+    const goHome = () => {
+        navigate("/home")
+    }
 
     const handleLogout = async () => {
         try {
@@ -40,10 +46,15 @@ function PersonalNavbar({ userImage }) {
 
                 {/* Links */}
                 <div className="flex space-x-6">
+                    {
+                        isHome && <button onClick={goHome} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                            Home
+                        </button>
+                    }
                     <button onClick={handleLogout} className="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
                         Logout
                     </button>
-                    <img src={userImage} alt="user image" className="w-7 h-7 rounded-full" />
+                    <img src={user.avatar} alt="user image" className="w-7 h-7 rounded-full" />
                 </div>
             </div>
         </nav>

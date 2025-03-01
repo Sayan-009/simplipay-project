@@ -15,7 +15,7 @@ const Toast = ({ message, type}) => {
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: "100%", opacity: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className={`fixed top-5 right-5 px-6 py-3 flex items-center gap-3 rounded-lg shadow-lg text-white ${
+      className={`fixed z-100 top-5 right-5 px-6 py-3 flex items-center gap-3 rounded-lg shadow-lg text-white ${
         type === "success" ? "bg-green-600" :
         type === "error" ? "bg-red-600" :
         type === "warning" ? "bg-yellow-600" :

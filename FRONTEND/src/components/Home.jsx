@@ -4,13 +4,16 @@ import axios from 'axios';
 import PersonalNavbar from './PersonalNavbar';
 import ClickableCard from './ClickableCard';
 import MoneySlider from './MoneySlider';
+import { userState } from '../stateManagement/userState';
+import { useRecoilState } from 'recoil';
+
 
 
 export default function Home() {
-  const [user, setUser] = useState(null)
-  const [error, setError] = useState("")
+  const [user, setUser] = useRecoilState(userState);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const navigate = useNavigate()
+  const [error, setError] = useState("")
   const fetchUser = async () => {
     try {
       const token = localStorage.getItem('accessToken')
@@ -24,28 +27,41 @@ export default function Home() {
       setUser(response.data.data)
       setError("")
     } catch (error) {
-      if (error.response?.statusCode >= 500 || error.stack) {
-        navigate("/500")
+      if (error.response) {
+        if (error.response.status >= 400 && error.response.status < 500) {
+          showToast(error.response?.data?.message, "error")
+        }
+        if (error.response.status >= 500) {
+          navigate("/500")
+        }
+        console.error("Error:", error.response?.data || error.message);
+      } else if (error.request) {
+        showToast(error.request)
+
+      } else {
+        showToast(error.message, "error")
       }
-      console.error("Error:", error.response?.data || error.message);
-      setError(error.response?.data?.message || "An unexpected error occurred");
     }
   }
   useEffect(() => {
     fetchUser();
   }, [])
 
-  function handleOption(url){
+  function handleTransaction(url) {
     setIsDialogOpen(true)
+  }
+
+  function handleUrl(url){
+    navigate(`${url}`)
   }
 
   return (
     <div>
-      <MoneySlider isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen}/>
+      <MoneySlider isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
       {
         user &&
         (<div className='bg-gradient-to-br from-gray-900 via-teal-800 to-gray-900'>
-          <PersonalNavbar userImage={user.avatar} />
+          <PersonalNavbar isHome={false}/>
           <div className="p-5 flex flex-col gap-y-3 bg-gradient-to-br from-gray-900 via-cyan-700 to-gray-900 rounded-bl-3xl rounded-br-3xl">
             <div className='pb-5'>
               <p className="text-blue-400 text-3xl font-bold">Hello, {user.fullName}</p>
@@ -64,12 +80,12 @@ export default function Home() {
           </div>
           {/* option */}
           <div className='flex flex-col gap-y-3 p-8 sm:flex-row sm:gap-x-10 sm:justify-center sm:flex-wrap '>
-            <ClickableCard type={"Add Money"} icon={"/currency.png"} onClick={handleOption} url={"/add-money"}/>
-            <ClickableCard type={"Fund Transfer"} icon={"/mobile-transfer.png"} onClick={handleOption} url={"/add-money"}/>
-            <ClickableCard type={"Transaction History"} icon={"/passbook.png"} onClick={handleOption} url={"/add-money"}/>
-            <ClickableCard type={"Show all Benificary"} icon={"/customer.png"} onClick={handleOption} url={"/add-money"}/>
-            <ClickableCard type={"Show all Transaction"} icon={"/passbook.png"} onClick={handleOption} url={"/add-money"}/>
-            <ClickableCard type={"Notificaion"} icon={"/notifications.png"} onClick={handleOption} url={"/add-money"}/>
+            <ClickableCard type={"Add Money"} icon={"/currency.png"} onClick={handleTransaction} url={"/add-money"} />
+            <ClickableCard type={"Fund Transfer"} icon={"/mobile-transfer.png"} onClick={handleTransaction} url={"/transfer-money"} />
+            <ClickableCard type={"Transaction History"} icon={"/passbook.png"} onClick={handleUrl} url={"/add-money"} />
+            <ClickableCard type={"Show all Benificary"} icon={"/customer.png"} onClick={handleUrl} url={"/add-money"} />
+            <ClickableCard type={"Show all Transaction"} icon={"/passbook.png"} onClick={handleUrl} url={"/add-money"} />
+            <ClickableCard type={"Notificaion"} icon={"/notifications.png"} onClick={handleUrl} url={"/notification"} />
           </div>
         </div>)
       }

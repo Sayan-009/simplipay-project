@@ -33,10 +33,9 @@ export default function Login() {
       localStorage.setItem('refreshToken', response.data.data.refreshToken);
       showToast("login successfull", "success");
       navigate('/home')
-      // alert("login successful!");
     } catch (error) {
       if (error.response) {
-        if (error.response.status >= 400) {
+        if (error.response.status >= 400 && error.response.status < 500) {
           showToast(error.response?.data?.message, "error")
         }
         if (error.response.status >= 500) {
