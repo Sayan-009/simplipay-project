@@ -6,12 +6,14 @@ import ClickableCard from './ClickableCard';
 import MoneySlider from './MoneySlider';
 import { userState } from '../stateManagement/userState';
 import { useRecoilState } from 'recoil';
+import TransferMoneyComponent from './TransferMoneyComponent';
 
 
 
 export default function Home() {
   const [user, setUser] = useRecoilState(userState);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isMoneyTransferDialogOpen, setIsMoneyTransferDialogOpen] = useState(false);
   const navigate = useNavigate()
   const [error, setError] = useState("")
   const fetchUser = async () => {
@@ -51,17 +53,22 @@ export default function Home() {
     setIsDialogOpen(true)
   }
 
-  function handleUrl(url){
+  function handleMoneyTransfer(url){
+    setIsMoneyTransferDialogOpen(true)
+  }
+
+  function handleUrl(url) {
     navigate(`${url}`)
   }
 
   return (
     <div>
       <MoneySlider isDialogOpen={isDialogOpen} setIsDialogOpen={setIsDialogOpen} />
+      <TransferMoneyComponent isMoneyTransferDialogOpen={isMoneyTransferDialogOpen} setIsMoneyTransferDialogOpen={setIsMoneyTransferDialogOpen} />
       {
         user &&
         (<div className='bg-gradient-to-br from-gray-900 via-teal-800 to-gray-900'>
-          <PersonalNavbar isHome={false}/>
+          <PersonalNavbar isHome={false} />
           <div className="p-5 flex flex-col gap-y-3 bg-gradient-to-br from-gray-900 via-cyan-700 to-gray-900 rounded-bl-3xl rounded-br-3xl">
             <div className='pb-5'>
               <p className="text-blue-400 text-3xl font-bold">Hello, {user.fullName}</p>
@@ -81,7 +88,7 @@ export default function Home() {
           {/* option */}
           <div className='flex flex-col gap-y-3 p-8 sm:flex-row sm:gap-x-10 sm:justify-center sm:flex-wrap '>
             <ClickableCard type={"Add Money"} icon={"/currency.png"} onClick={handleTransaction} url={"/add-money"} />
-            <ClickableCard type={"Fund Transfer"} icon={"/mobile-transfer.png"} onClick={handleTransaction} url={"/transfer-money"} />
+            <ClickableCard type={"Fund Transfer"} icon={"/mobile-transfer.png"} onClick={handleMoneyTransfer} url={"/transfer-money"} />
             <ClickableCard type={"Transaction History"} icon={"/passbook.png"} onClick={handleUrl} url={"/add-money"} />
             <ClickableCard type={"Show all Benificary"} icon={"/customer.png"} onClick={handleUrl} url={"/add-money"} />
             <ClickableCard type={"Show all Transaction"} icon={"/passbook.png"} onClick={handleUrl} url={"/add-money"} />

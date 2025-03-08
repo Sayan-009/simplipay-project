@@ -35,7 +35,7 @@ const MoneySlider = ({ isDialogOpen, setIsDialogOpen }) => {
           },
         })
       showToast(`Added ₹${amount} to your account!`, "success");
-      navigate("/transaction-success", 
+      navigate("/transaction-success",
         {
           state: {
             message: `Transaction Successful! ₹${amount} added.`
@@ -91,8 +91,8 @@ const MoneySlider = ({ isDialogOpen, setIsDialogOpen }) => {
             clientError && <p className="text-red-600">{clientError}</p>
           }
           <Button onClick={handleAddMoney} className="w-full" disabled={isAdding} >{
-            !isAdding ? `Confirm Add ₹${amount} `: `Depositing...`
-            }
+            !isAdding ? `Confirm Add ₹${amount} ` : `Depositing...`
+          }
           </Button>
         </div>
       </DialogContent>

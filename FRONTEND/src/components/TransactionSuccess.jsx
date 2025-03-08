@@ -3,6 +3,7 @@ import PersonalNavbar from "./PersonalNavbar";
 
 const TransactionSuccess = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const message = location.state?.message || "Transaction completed!";
 
     return (
